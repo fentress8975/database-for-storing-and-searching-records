@@ -58,7 +58,8 @@ class JsonToBDLoader
 
     private function getJsonName($url)
     {
-        return end(explode('/', $url));
+        $result = explode('/', $url);
+        return end($result);
     }
 
     public function uploadToDB($url)
@@ -69,6 +70,8 @@ class JsonToBDLoader
         $columnNames = $this->getColumnNames($data[0]);
         $sqlBase = $this->prepareBaseSQLStatement($columnNames, $tableName);
 
+        $counter = 0;
+
         foreach ($data as $key) {
             $varArr = [];
             foreach ($key as $value) {
@@ -77,6 +80,8 @@ class JsonToBDLoader
 
             $stmt = $this->db->prepare($sqlBase);
             $stmt->execute($varArr);
+            $counter++;
         }
+        echo "Загружено $counter $tableName \n";
     }
 }
